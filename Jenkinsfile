@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
         SSH_CRED = credentials('server-key')
-        //def CONNECT = 'ssh -o StrictHostKeyChecking=no ubuntu@35.182.83.102'
+        def CONNECT = 'ssh -o StrictHostKeyChecking=no ubuntu@15.222.239.237'
     }
     stages {
         
@@ -19,13 +19,13 @@ pipeline {
        stage('Deploy') {
             steps {
                 echo 'Deploying app'
-                // sshagent(['server-key']) {
-                //     sh 'scp -o StrictHostKeyChecking=no -i $SSH_CRED webapp.zip ubuntu@35.182.83.102:/home/ubuntu'
-                //     sh '$CONNECT "sudo apt install zip -y"'
-                //     sh '$CONNECT "sudo rm -rf /var/www/html/"'
-                //     sh '$CONNECT "sudo mkdir /var/www/html/"'
-                //     sh '$CONNECT "sudo unzip webapp.zip -d /var/www/html/"'                    
-                // }
+                sshagent(['server-key']) {
+                    sh 'scp -o StrictHostKeyChecking=no -i $SSH_CRED webapp.zip ubuntu@15.222.239.237:/home/ubuntu'
+                    sh '$CONNECT "sudo apt install zip -y"'
+                    sh '$CONNECT "sudo rm -rf /var/www/html/"'
+                    sh '$CONNECT "sudo mkdir /var/www/html/"'
+                    sh '$CONNECT "sudo unzip webapp.zip -d /var/www/html/"'                    
+                }
             }
         }
         stage('Clean-Up') {
