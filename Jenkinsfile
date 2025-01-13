@@ -21,8 +21,6 @@ pipeline {
                 sh "curl -u admin:admin123 --upload-file webapp.zip http://15.223.0.27:8081/repository/webapp/webapp.zip"
                 
             }
-
-            
         }
        stage('Deploy') {
             steps {
