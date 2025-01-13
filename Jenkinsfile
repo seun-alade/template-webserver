@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
         SSH_CRED = credentials('server-key')
-        def CONNECT = 'ssh -o StrictHostKeyChecking=no ubuntu@15.222.239.237'
+        def CONNECT = 'ssh -o StrictHostKeyChecking=no ubuntu@35.183.238.42'
     }
     stages {
         
@@ -15,12 +15,18 @@ pipeline {
                 sh "ls"
             }
         }
-        
+        stage('artifact') {
+            steps {
+                echo 'pushing artifact to nexus'
+                sh "curl -u admin:admin123 --upload-file webapp.zip http://15.223.0.27:8081/repository/webapp/webapp.zip"
+                
+            }
+        }
        stage('Deploy') {
             steps {
                 echo 'Deploying app'
                 sshagent(['server-key']) {
-                    sh 'scp -o StrictHostKeyChecking=no -i $SSH_CRED webapp.zip ubuntu@15.222.239.237:/home/ubuntu'
+                    sh '$CONNECT "curl -u admin:admin123 -O http://15.223.0.27:8081/repository/webapp/webapp.zip"'
                     sh '$CONNECT "sudo apt install zip -y"'
                     sh '$CONNECT "sudo rm -rf /var/www/html/"'
                     sh '$CONNECT "sudo mkdir /var/www/html/"'
