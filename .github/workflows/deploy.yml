@@ -37,12 +37,17 @@ jobs:
           key: ${{ secrets.EC2_PEM }}
           port: 22
           script: |
-            # Check that zip is installed
-            sudo apt install zip -y
-            # Remove the existing files and directories
-            sudo rm -rf /var/www/html/ 
-            # Create a new, empty directory at /var/www/html/
-            sudo mkdir /var/www/html/
-            # Extract the contents of "webapp.zip" into the /var/www/html/ directory
-            sudo unzip webapp.zip -d /var/www/html/ 
+            sudo apt-get update -y
+            sudo DEBIAN_FRONTEND=noninteractive apt-get install -y zip unzip
+            sudo rm -rf /var/www/html/
+            sudo mkdir -p /var/www/html/
+            sudo unzip webapp.zip -d /var/www/html/
+            # # Check that zip is installed
+            # sudo apt install zip -y
+            # # Remove the existing files and directories
+            # sudo rm -rf /var/www/html/ 
+            # # Create a new, empty directory at /var/www/html/
+            # sudo mkdir /var/www/html/
+            # # Extract the contents of "webapp.zip" into the /var/www/html/ directory
+            # sudo unzip webapp.zip -d /var/www/html/ 
         
